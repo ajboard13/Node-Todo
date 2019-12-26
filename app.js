@@ -11,7 +11,16 @@ app.use('/assets', express.static(__dirname + '/public'));
 
 app.set('view engine', 'ejs');
 
-mongoose.connect(config.getDbConnectionString(), { useNewUrlParser: true, useUnifiedTopology: true });
+(async () => {
+    var mongoUrl = config.getDbConnectionString();
+    try{
+        await mongoose.connect(mongoUrl, {useNewUrlParser: true, dbName:'node-todo', useUnifiedTopology: true});
+        console.log('Mongo connected');
+    }catch(e){
+        console.error(e);
+    }
+})() 
+
 setupController(app);
 
 app.listen(port);
